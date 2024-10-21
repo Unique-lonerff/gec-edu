@@ -9,6 +9,8 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
     cache: false
+    encoding: UTF-8 #编码
+    mode: HTML #模板
 
 
 

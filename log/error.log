@@ -1,0 +1,38 @@
+2024-10-21 10:51:10.403 ERROR personal.zx.myocean.exception.ExceptionAdvice     :26   [32m                  [0;39m 数据校验出现问题Validation failed for argument [0] in public personal.zx.myocean.utils.CommonResp personal.zx.myocean.controller.TestController.sayHello(personal.zx.myocean.rep.DemoReq) with 3 errors: [Field error in object 'demoReq' on field 'phone': rejected value [132131232112]; codes [Pattern.demoReq.phone,Pattern.phone,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [demoReq.phone,phone]; arguments []; default message [phone],[Ljavax.validation.constraints.Pattern$Flag;@78c0a9b5,^1[3|4|5|6|7|8|9][0-9]{9}$]; default message [手机号格式不正确！]] [Field error in object 'demoReq' on field 'name': rejected value [zx]; codes [Pattern.demoReq.name,Pattern.name,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [demoReq.name,name]; arguments []; default message [name],[Ljavax.validation.constraints.Pattern$Flag;@78c0a9b5,^[\u4e00-\u9fa5]{2,15}$]; default message [姓名应为2-15中文]] [Field error in object 'demoReq' on field 'password': rejected value [123]; codes [Length.demoReq.password,Length.password,Length.java.lang.String,Length]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [demoReq.password,password]; arguments []; default message [password],20,6]; default message [密码必须是6-20位字符]] ,异常类型class org.springframework.web.bind.MethodArgumentNotValidException
+2024-10-21 17:19:16.774 ERROR org.springframework.boot.SpringApplication        :856  [32m                  [0;39m Application run failed
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'ebookController': Lookup method resolution failed; nested exception is java.lang.IllegalStateException: Failed to introspect Class [personal.zx.myocean.controller.EbookController] from ClassLoader [sun.misc.Launcher$AppClassLoader@18b4aac2]
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.determineCandidateConstructors(AutowiredAnnotationBeanPostProcessor.java:289)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.determineConstructorsFromBeanPostProcessors(AbstractAutowireCapableBeanFactory.java:1286)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1203)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:571)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:531)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:944)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:925)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:588)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:144)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:767)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:759)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:426)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:326)
+	at personal.zx.myocean.MyOceanApplication.main(MyOceanApplication.java:21)
+Caused by: java.lang.IllegalStateException: Failed to introspect Class [personal.zx.myocean.controller.EbookController] from ClassLoader [sun.misc.Launcher$AppClassLoader@18b4aac2]
+	at org.springframework.util.ReflectionUtils.getDeclaredMethods(ReflectionUtils.java:481)
+	at org.springframework.util.ReflectionUtils.doWithLocalMethods(ReflectionUtils.java:321)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.determineCandidateConstructors(AutowiredAnnotationBeanPostProcessor.java:267)
+	... 17 common frames omitted
+Caused by: java.lang.NoClassDefFoundError: personal/zx/myocean/req/EbookQueryReq
+	at java.lang.Class.getDeclaredMethods0(Native Method)
+	at java.lang.Class.privateGetDeclaredMethods(Class.java:2729)
+	at java.lang.Class.getDeclaredMethods(Class.java:2003)
+	at org.springframework.util.ReflectionUtils.getDeclaredMethods(ReflectionUtils.java:463)
+	... 19 common frames omitted
+Caused by: java.lang.ClassNotFoundException: personal.zx.myocean.req.EbookQueryReq
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:387)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:418)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:352)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:351)
+	... 23 common frames omitted
