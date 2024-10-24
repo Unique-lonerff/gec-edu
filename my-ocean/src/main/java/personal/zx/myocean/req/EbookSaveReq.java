@@ -1,23 +1,21 @@
-package personal.zx.myocean.resp;
+package personal.zx.myocean.req;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author 小z
- * @date 2024年10月21日 下午3:54
+ * @date 2024年10月22日 下午3:03
  */
-
 
 @Data
 @ToString
-public class EbookQueryResp {
-
-    @JsonSerialize(using = ToStringSerializer.class)
+public class EbookSaveReq {
     private Long id;
 
+    @NotNull(message = "【名称】不能为空")
     private String name;
 
     private Long category1Id;

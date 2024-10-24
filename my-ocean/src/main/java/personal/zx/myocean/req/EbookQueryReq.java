@@ -10,7 +10,7 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class EbookQueryReq {
+public class EbookQueryReq extends PageReq{
     //主键
     private Long id;
     //海洋生物电子书名
