@@ -10,8 +10,10 @@ import java.io.IOException;
  * @date 2024年10月21日 上午11:02
  */
 
-@WebFilter(urlPatterns = "/*")
-public class XssFilter implements Filter {
+@WebFilter(urlPatterns = "/*")//过滤所有请求
+public class XssFilter  implements Filter {
+
+    String noFilterUrls[] = new String[] { "/doc/save" };
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         Filter.super.init(filterConfig);
@@ -19,9 +21,23 @@ public class XssFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
+
         HttpServletRequest request= (HttpServletRequest) servletRequest;
-        XssHttpServletRequestWrapper wrapper=new XssHttpServletRequestWrapper(request);
-        filterChain.doFilter(wrapper,servletResponse);
+        String uri = request.getRequestURI();
+        boolean isFilter = true;
+        for (String noFilterUrl : noFilterUrls) {
+            if (noFilterUrl.equals(uri)) {
+                //如果匹配到 则变为false 则是进行doc新增或修改
+                isFilter = false;
+            }
+        }
+        if(!isFilter){
+            filterChain.doFilter(servletRequest,servletResponse);
+        }else { //进行html标签过滤
+            XssHttpServletRequestWrapper wrapper=new XssHttpServletRequestWrapper(request);
+            filterChain.doFilter(wrapper,servletResponse);
+        }
     }
 
     @Override

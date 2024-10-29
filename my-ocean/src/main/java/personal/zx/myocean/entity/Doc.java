@@ -2,6 +2,8 @@ package personal.zx.myocean.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.io.Serializable;
 
 /**
@@ -16,8 +18,8 @@ public class Doc implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    @TableId(value = "id", type = IdType.INPUT)
+    private Long id;
 
     /**
      * 电子书id
@@ -50,11 +52,11 @@ public class Doc implements Serializable {
     private Integer voteCount;
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

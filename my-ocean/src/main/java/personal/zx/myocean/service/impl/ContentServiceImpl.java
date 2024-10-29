@@ -17,4 +17,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ContentServiceImpl extends ServiceImpl<ContentMapper, Content> implements IContentService {
 
+    @Override
+    public String findContent(Long id) {
+        Content content = this.baseMapper.selectById(id);
+        if(content !=null){
+            return content.getContent();
+        }
+        return null;
+    }
 }
