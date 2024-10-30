@@ -30,4 +30,8 @@ public interface IDocService extends IService<Doc> {
     void delete(List<Long> ids);
 
     List<DocQueryResp> allbyEbookId(Long ebookId);
+
+    void vote(Long id);
+
+    void updateEbookInfo();
 }

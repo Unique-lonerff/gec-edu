@@ -3,11 +3,17 @@ package personal.zx.myocean.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.ObjectUtils;
 import personal.zx.myocean.entity.Content;
 import personal.zx.myocean.entity.Doc;
+import personal.zx.myocean.exception.BusinessException;
+import personal.zx.myocean.exception.BusinessExceptionCode;
 import personal.zx.myocean.mapper.DocMapper;
+import personal.zx.myocean.mapper.EbookMapper;
 import personal.zx.myocean.req.DocQueryReq;
 import personal.zx.myocean.req.DocSaveReq;
 import personal.zx.myocean.resp.DocQueryResp;
@@ -17,8 +23,13 @@ import personal.zx.myocean.service.IDocService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import personal.zx.myocean.utils.CopyUtil;
+import personal.zx.myocean.utils.RedisUtil;
+import personal.zx.myocean.utils.RequestContext;
 import personal.zx.myocean.utils.SnowFlake;
+import personal.zx.myocean.websocket.WebSocketServer;
+import personal.zx.myocean.websocket.WsServiceAsync;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -37,6 +48,12 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
     private SnowFlake snowFlake;
     @Autowired
     IContentService contentService;
+    @Autowired
+    private EbookMapper ebookMapper;
+    @Autowired
+    private RedisUtil redisUtil;
+    @Resource
+    private RocketMQTemplate rocketMQTemplate;
 
     @Override
     public PageResp<DocQueryResp> listByname(DocQueryReq req) {
@@ -100,7 +117,8 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
 
     @Override
     public List<DocQueryResp> allbyEbookId(Long ebookId) {
-
+        //该电子书阅读数+1
+        ebookMapper.increaseViewCount(ebookId);
         QueryWrapper<Doc> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("ebook_id",ebookId).orderByAsc("sort");
         List<Doc> doclist = this.baseMapper.selectList(queryWrapper);
@@ -108,5 +126,30 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
         // 列表复制
         List<DocQueryResp> list = CopyUtil.copyList(doclist, DocQueryResp.class);
         return list;
+    }
+
+
+    @Override
+    public void vote(Long id) {
+
+        //key为  DOC_VOTE_123123123_192.168.0.1
+        String key ="DOC_VOTE_"+id+"_"+RequestContext.getRemoteAddr();
+        if(redisUtil.validateRepeat(key,3600*24)){
+            this.baseMapper.increaseVoteCount(id);
+        }else{
+            throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
+        }
+        // sendInfo(id);//发送点赞通知
+        Doc doc = this.baseMapper.selectById(id);
+        String logId = MDC.get("LOG_ID");
+        //wsServiceAsync.sendInfo("【您的文档 " + doc.getName() + "】被点赞！",logId);
+        //参数1  发送队列 参数2消息内容
+        rocketMQTemplate.convertAndSend("VOTE_TOPIC", "【" + doc.getName() + "】被点赞！");
+    }
+
+
+    @Override
+    public void updateEbookInfo() {
+        this.baseMapper.updateEbookInfo();
     }
 }

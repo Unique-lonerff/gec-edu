@@ -15,4 +15,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 @Mapper
 public interface EbookMapper extends BaseMapper<Ebook> {
 
+    void increaseViewCount(Long ebookId);
 }

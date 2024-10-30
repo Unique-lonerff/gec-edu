@@ -2,7 +2,7 @@ package personal.zx.myocean.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Controller;
+
 import personal.zx.myocean.req.CategoryQueryReq;
 import personal.zx.myocean.req.CategorySaveReq;
 import personal.zx.myocean.resp.CategoryQueryResp;

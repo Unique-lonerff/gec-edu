@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/my_ocean?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/my_ocean?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: Zx123456
   redis:
@@ -21,3 +21,8 @@ logging:
       zx:
         myocean:
           mapper: trace
+
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: default
